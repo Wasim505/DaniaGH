@@ -12,10 +12,11 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: #ffebee;
-            text-align: center;
-            color: #d81b60;
             position: relative;
+            background-image: url('img.jpg'); /* Use your gift image as the background */
+            background-size: cover;
+            color: #fff; /* Text color for better visibility on background */
+            text-align: center;
         }
         h1 {
             font-size: 2em;
@@ -25,15 +26,12 @@
             font-size: 3em;
             color: #e91e63;
         }
+        #questions {
+            display: none; /* Hidden initially */
+            margin: 20px;
+        }
         #gift {
             display: none;
-            background-image: url('img.jpg');
-            background-size: cover;
-            height: 300px;
-            width: 300px;
-            margin: 20px auto;
-            border-radius: 10px;
-            position: relative;
         }
         #birthdayMessage {
             display: none;
@@ -41,10 +39,16 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.8);
             padding: 20px;
             border-radius: 15px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 1em;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -55,28 +59,53 @@
         <button id="submitName">Submit</button>
     </div>
 
+    <div id="questions">
+        <div id="momQuestion"></div>
+        <button id="yesMom">Yes</button>
+        <button id="noMom">No</button>
+        <div id="loveMessage"></div>
+        <button id="birthdayYes">Yes</button>
+        <button id="birthdayNo">No</button>
+    </div>
+
+    <div id="gift"></div>
+    <div id="birthdayMessage">🎉 Happy Birthday to the best mom on the planet!!!!! 🎉</div>
+
     <script>
         document.getElementById('submitName').addEventListener('click', function() {
-            const name = document.getElementById('nameInput').value;
+            const name = document.getElementById('nameInput').value.trim();
             if (name) {
-                if (confirm(`Are you ${name}'s mom?`)) {
-                    alert(`OMG !!!!!! Hello ${name}, we have been waiting for you! Do you know Waseem loves you so so so so so much?`);
-                    if (confirm("Is it your birthday?")) {
-                        document.getElementById('gift').style.display = 'block';
-                        if (confirm("Incoming gift! Do you accept it?")) {
-                            document.getElementById('birthdayMessage').style.display = 'block';
-                        }
-                    }
-                } else {
-                    alert("That's okay, we still love you! ❤️");
-                }
+                document.getElementById('content').style.display = 'none';
+                document.getElementById('questions').style.display = 'block';
+                document.getElementById('momQuestion').textContent = `Are you ${name}'s mom?`;
             } else {
                 alert("Please enter your name.");
             }
         });
-    </script>
 
-    <div id="gift"></div>
-    <div id="birthdayMessage">🎉 Happy Birthday to the best mom on the planet!!!!! 🎉</div>
+        document.getElementById('yesMom').addEventListener('click', function() {
+            const name = document.getElementById('nameInput').value.trim();
+            document.getElementById('loveMessage').textContent = `OMG !!!!!! Hello ${name}, we have been waiting for you! Do you know Waseem loves you so so so so so much?`;
+            document.getElementById('birthdayYes').style.display = 'inline';
+            document.getElementById('birthdayNo').style.display = 'inline';
+        });
+
+        document.getElementById('noMom').addEventListener('click', function() {
+            document.getElementById('loveMessage').textContent = "That's okay, we still love you! ❤️";
+            document.getElementById('birthdayYes').style.display = 'none';
+            document.getElementById('birthdayNo').style.display = 'none';
+        });
+
+        document.getElementById('birthdayYes').addEventListener('click', function() {
+            document.getElementById('gift').style.display = 'block';
+            if (confirm("Incoming gift! Do you accept it?")) {
+                document.getElementById('birthdayMessage').style.display = 'block';
+            }
+        });
+
+        document.getElementById('birthdayNo').addEventListener('click', function() {
+            document.getElementById('birthdayMessage').style.display = 'none';
+        });
+    </script>
 </body>
 </html>
