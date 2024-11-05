@@ -2,79 +2,81 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Special Message</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Love Message</title>
     <style>
         body {
+            font-family: Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #f9f9f9;
-            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #ffebee;
             text-align: center;
+            color: #d81b60;
+            position: relative;
         }
-        #container {
-            max-width: 400px;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        h1 {
+            font-size: 2em;
+            margin: 20px 0;
+        }
+        .heart {
+            font-size: 3em;
+            color: #e91e63;
+        }
+        #gift {
+            display: none;
+            background-image: url('img.jpg');
+            background-size: cover;
+            height: 300px;
+            width: 300px;
+            margin: 20px auto;
             border-radius: 10px;
-            background-color: #fff;
+            position: relative;
         }
-        button {
-            margin: 10px;
-            padding: 10px 20px;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            background-color: #4CAF50;
-            color: white;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #45a049;
+        #birthdayMessage {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
     </style>
 </head>
 <body>
-
-<div id="container">
-    <h2 id="question">Are you Dania?</h2>
-    <div id="buttonArea">
-        <button onclick="nextQuestion('yes')">Yes</button>
-        <button onclick="nextQuestion('no')">No</button>
+    <div id="content">
+        <h1 class="heart">❤️ Hello there, Who are you? ❤️</h1>
+        <input type="text" id="nameInput" placeholder="Enter your name" />
+        <button id="submitName">Submit</button>
     </div>
-</div>
 
-<script>
-    let questionIndex = 0;
-    const questions = [
-        "Are you Dania?",
-        "Are you Waseem's mom?",
-        "Do you know he loves you a lot?",
-        "Is it your birthday?",
-        "Happy birthday to the best mom on the planet!!!!!"
-    ];
+    <script>
+        document.getElementById('submitName').addEventListener('click', function() {
+            const name = document.getElementById('nameInput').value;
+            if (name) {
+                if (confirm(`Are you ${name}'s mom?`)) {
+                    alert(`OMG !!!!!! Hello ${name}, we have been waiting for you! Do you know Waseem loves you so so so so so much?`);
+                    if (confirm("Is it your birthday?")) {
+                        document.getElementById('gift').style.display = 'block';
+                        if (confirm("Incoming gift! Do you accept it?")) {
+                            document.getElementById('birthdayMessage').style.display = 'block';
+                        }
+                    }
+                } else {
+                    alert("That's okay, we still love you! ❤️");
+                }
+            } else {
+                alert("Please enter your name.");
+            }
+        });
+    </script>
 
-    function nextQuestion(answer) {
-        const questionElement = document.getElementById("question");
-        const buttonArea = document.getElementById("buttonArea");
-
-        if (questionIndex === 0 && answer === 'no') {
-            questionElement.textContent = "Sorry, this message is for Dania.";
-            buttonArea.innerHTML = ""; // Clear buttons if user is not Dania
-            return;
-        }
-
-        questionIndex++;
-        if (questionIndex < questions.length - 1) {
-            questionElement.textContent = questions[questionIndex];
-        } else if (questionIndex === questions.length - 1) {
-            questionElement.textContent = questions[questionIndex];
-            buttonArea.innerHTML = "";  // Clear buttons for the final message
-        }
-    }
-</script>
-
+    <div id="gift"></div>
+    <div id="birthdayMessage">🎉 Happy Birthday to the best mom on the planet!!!!! 🎉</div>
 </body>
 </html>
