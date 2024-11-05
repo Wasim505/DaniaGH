@@ -95,24 +95,32 @@
     });
 
     document.getElementById("yesButton").addEventListener("click", function() {
-        currentQuestion++;
         handleYes();
     });
 
     document.getElementById("noButton").addEventListener("click", function() {
-        currentQuestion++;
         handleNo();
     });
 
     function handleYes() {
+        currentQuestion++;
         if (currentQuestion === 3) { // Is it your birthday?
-            showGiftPopup();
+            const acceptGift = confirm("Incoming birthday gift from Wasim! Do you accept it?");
+            if (acceptGift) {
+                showGiftPopup();
+            } else {
+                alert("No worries! Enjoy your day!");
+                // Optionally, you could end the questions or go to a different state here.
+                currentQuestion++; // Skip to the next question if you want to continue.
+                displayQuestion();
+            }
         } else {
             displayQuestion();
         }
     }
 
     function handleNo() {
+        currentQuestion++;
         displayQuestion();
     }
 
