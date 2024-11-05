@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Special Message</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f9f9f9;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #container {
+            max-width: 400px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            background-color: #fff;
+        }
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <h2 id="question">Are you Dania?</h2>
+    <div id="buttonArea">
+        <button onclick="nextQuestion('yes')">Yes</button>
+        <button onclick="nextQuestion('no')">No</button>
+    </div>
+</div>
+
+<script>
+    let questionIndex = 0;
+    const questions = [
+        "Are you Dania?",
+        "Are you Waseem's mom?",
+        "Do you know he loves you a lot?",
+        "Is it your birthday?",
+        "Happy birthday to the best mom on the planet!!!!!"
+    ];
+
+    function nextQuestion(answer) {
+        const questionElement = document.getElementById("question");
+        const buttonArea = document.getElementById("buttonArea");
+
+        if (questionIndex === 0 && answer === 'no') {
+            questionElement.textContent = "Sorry, this message is for Dania.";
+            buttonArea.innerHTML = ""; // Clear buttons if user is not Dania
+            return;
+        }
+
+        questionIndex++;
+        if (questionIndex < questions.length - 1) {
+            questionElement.textContent = questions[questionIndex];
+        } else if (questionIndex === questions.length - 1) {
+            questionElement.textContent = questions[questionIndex];
+            buttonArea.innerHTML = "";  // Clear buttons for the final message
+        }
+    }
+</script>
+
+</body>
+</html>
