@@ -12,23 +12,27 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            position: relative;
-            background-image: url('img.jpg'); /* Use your gift image as the background */
-            background-size: cover;
-            color: #fff; /* Text color for better visibility on background */
+            background-color: #ffebee; /* Fallback color */
+            color: #fff; /* Text color for better visibility */
             text-align: center;
+            position: relative;
+            overflow: hidden; /* Prevent overflow due to elements */
         }
         h1 {
-            font-size: 2em;
+            font-size: 2.5em;
             margin: 20px 0;
         }
         .heart {
             font-size: 3em;
             color: #e91e63;
         }
-        #questions {
+        .questionBox {
             display: none; /* Hidden initially */
             margin: 20px;
+            padding: 20px;
+            background: rgba(220, 20, 60, 0.7); /* Translucent red */
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
         #gift {
             display: none;
@@ -39,7 +43,7 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.9);
             padding: 20px;
             border-radius: 15px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -49,10 +53,31 @@
             margin: 5px;
             font-size: 1em;
             cursor: pointer;
+            border-radius: 5px;
+            background-color: #e91e63; /* Love theme button */
+            color: #fff;
+            border: none;
+        }
+        button:hover {
+            background-color: #d81b60; /* Darker shade on hover */
+        }
+        .emoji {
+            font-size: 2em;
+        }
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('img.jpg'); /* Use your gift image as the background */
+            background-size: cover;
+            display: none; /* Hidden until gift is accepted */
         }
     </style>
 </head>
 <body>
+    <div class="background"></div>
     <div id="content">
         <h1 class="heart">❤️ Hello there, Who are you? ❤️</h1>
         <input type="text" id="nameInput" placeholder="Enter your name" />
@@ -60,52 +85,83 @@
     </div>
 
     <div id="questions">
-        <div id="momQuestion"></div>
-        <button id="yesMom">Yes</button>
-        <button id="noMom">No</button>
-        <div id="loveMessage"></div>
-        <button id="birthdayYes">Yes</button>
-        <button id="birthdayNo">No</button>
+        <div class="questionBox" id="momQuestion"></div>
+        <div class="questionBox" id="loveMessage"></div>
+        <div class="questionBox" id="birthdayQuestion"></div>
+        <div class="questionBox" id="acceptGiftQuestion"></div>
     </div>
 
     <div id="gift"></div>
     <div id="birthdayMessage">🎉 Happy Birthday to the best mom on the planet!!!!! 🎉</div>
 
     <script>
+        const questions = [
+            (name) => `Are you ${name}'s mom?`,
+            (name) => `OMG !!!!!! Hello ${name}, we have been waiting for you! Do you know Waseem loves you so so so so so much?`,
+            () => "Is it your birthday?",
+            () => "Incoming gift! Do you accept it?"
+        ];
+
+        let questionIndex = 0;
+        let userName = '';
+
         document.getElementById('submitName').addEventListener('click', function() {
-            const name = document.getElementById('nameInput').value.trim();
-            if (name) {
+            userName = document.getElementById('nameInput').value.trim();
+            if (userName) {
                 document.getElementById('content').style.display = 'none';
-                document.getElementById('questions').style.display = 'block';
-                document.getElementById('momQuestion').textContent = `Are you ${name}'s mom?`;
+                showNextQuestion();
             } else {
                 alert("Please enter your name.");
             }
         });
 
-        document.getElementById('yesMom').addEventListener('click', function() {
-            const name = document.getElementById('nameInput').value.trim();
-            document.getElementById('loveMessage').textContent = `OMG !!!!!! Hello ${name}, we have been waiting for you! Do you know Waseem loves you so so so so so much?`;
-            document.getElementById('birthdayYes').style.display = 'inline';
-            document.getElementById('birthdayNo').style.display = 'inline';
+        function showNextQuestion() {
+            if (questionIndex < questions.length) {
+                const questionBox = document.querySelectorAll('.questionBox')[questionIndex];
+                questionBox.textContent = questions[questionIndex](userName);
+                questionBox.style.display = 'block';
+                questionIndex++;
+            } else {
+                handleFinalQuestion();
+            }
+        }
+
+        document.getElementById('momQuestion').addEventListener('click', function() {
+            if (questionIndex === 1) {
+                showNextQuestion();
+            }
         });
 
-        document.getElementById('noMom').addEventListener('click', function() {
-            document.getElementById('loveMessage').textContent = "That's okay, we still love you! ❤️";
-            document.getElementById('birthdayYes').style.display = 'none';
-            document.getElementById('birthdayNo').style.display = 'none';
+        document.getElementById('loveMessage').addEventListener('click', function() {
+            showNextQuestion();
+            document.getElementById('birthdayQuestion').style.display = 'block';
+            document.getElementById('birthdayQuestion').innerHTML = "Is it your birthday? <button id='birthdayYes'>Yes</button> <button id='birthdayNo'>No</button>";
         });
 
-        document.getElementById('birthdayYes').addEventListener('click', function() {
-            document.getElementById('gift').style.display = 'block';
-            if (confirm("Incoming gift! Do you accept it?")) {
+        document.getElementById('birthdayQuestion').addEventListener('click', function(event) {
+            if (event.target.id === 'birthdayYes') {
+                showGiftQuestion();
+            } else if (event.target.id === 'birthdayNo') {
+                document.getElementById('birthdayMessage').textContent = "No worries! We still love you! ❤️";
                 document.getElementById('birthdayMessage').style.display = 'block';
             }
         });
 
-        document.getElementById('birthdayNo').addEventListener('click', function() {
-            document.getElementById('birthdayMessage').style.display = 'none';
-        });
+        function showGiftQuestion() {
+            const giftBox = document.getElementById('gift');
+            giftBox.innerHTML = "Incoming gift! Do you accept it? <button id='acceptYes'>Yes</button> <button id='acceptNo'>No</button>";
+            giftBox.style.display = 'block';
+
+            document.getElementById('acceptYes').addEventListener('click', function() {
+                document.querySelector('.background').style.display = 'block';
+                document.getElementById('birthdayMessage').style.display = 'block';
+            });
+
+            document.getElementById('acceptNo').addEventListener('click', function() {
+                document.getElementById('birthdayMessage').textContent = "That's okay, gifts aren't everything! ❤️";
+                document.getElementById('birthdayMessage').style.display = 'block';
+            });
+        }
     </script>
 </body>
 </html>
